@@ -12,7 +12,7 @@
 library(tidyverse)
 
 ## Functions
-source("...")
+source("R\utils.R")
 
 # 2. Load data ------------------------------------------------------------
 
@@ -23,7 +23,27 @@ iris_tbl <- as_tibble(iris)
 
 ## Calculate mean of numeric variables in Iris dataset, and sort them
 
+iris_tbl %>% 
+    summarise(
+        across(
+            where(is.numeric), mean
+        ), 
+        .by = Species
+    ) %>% 
+    pivot_longer(
+        col = where(is.numeric), 
+        names_to = "measure",
+        values_to = "mean"
+    ) %>% 
+    group_by(measure) %>% 
+    arrange(
+        desc(mean), 
+        .by_group = TRUE
+    ) %>% 
+    ungroup()
 
+iris_tbl %>% 
+    cal_iris_mean()
 
 # 4. General function -----------------------------------------------------
 
