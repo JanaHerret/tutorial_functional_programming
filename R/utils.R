@@ -36,3 +36,27 @@ cal_iris_mean <- function(data) {
         ) %>% 
         ungroup()
 }
+
+##FUNCTION: summarise mean of numeric variables
+calc_numeric_mean <- function(data, group) {
+    data %>% 
+        summarise(
+            across(
+                where(is.numeric), \(x) mean(x, na.rm = TRUE) 
+            ), 
+            .by = {{ group }}
+        ) %>% 
+        pivot_longer(
+            col = where(is.numeric), 
+            names_to = "measure",
+            values_to = "mean"
+        ) %>% 
+        group_by(measure) %>% 
+        arrange(
+            desc(mean), 
+            .by_group = TRUE
+        ) %>% 
+        ungroup()
+    
+}
+
